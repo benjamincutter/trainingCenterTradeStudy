@@ -91,7 +91,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                Trade Study
+                Training Center Location Trade Study
                 <TableControls
                     setShowNormalizedScore={setShowNormalizedScore}
                     showNormalizedScore={showNormalizedScore}

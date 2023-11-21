@@ -32,7 +32,6 @@ const TableControls = ({
     const totalWeight = sliders.reduce((acc, curr) => acc + curr.value, 0);
     return (
         <Box margin="2%" width={'50%'}>
-            <Typography>TableControls</Typography>
             <Accordion>
                 <AccordionSummary
                     expandIcon={<GridExpandMoreIcon />}
@@ -43,7 +42,11 @@ const TableControls = ({
                 <AccordionDetails>
                     <Typography
                         align="left"
-                        color={totalWeight === 1 ? 'green' : 'red'}
+                        color={
+                            roundToTwoDecimals(totalWeight) === 1
+                                ? 'green'
+                                : 'red'
+                        }
                     >
                         Total weight: {roundToTwoDecimals(totalWeight)}
                     </Typography>
