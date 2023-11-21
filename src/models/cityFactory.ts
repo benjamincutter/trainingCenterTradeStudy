@@ -35,7 +35,7 @@ interface FieldWeight {
 
 export const WEIGHTED_FIELDS: FieldWeight[] = [
     { field: 'comfortIndex', inverted: false, prettyName: 'Comfort Index' },
-    { field: 'sunnyDays', inverted: true, prettyName: 'Sunny Days' },
+    { field: 'sunnyDays', inverted: false, prettyName: 'Sunny Days' },
     { field: 'commuteTime', inverted: true, prettyName: 'Commute Time' },
     { field: 'propertyTax', inverted: true, prettyName: 'Property Tax' },
     {
