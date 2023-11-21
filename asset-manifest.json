@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/trainingCenterTradeStudy/static/css/main.f855e6bc.css",
-    "main.js": "/trainingCenterTradeStudy/static/js/main.4f6194d8.js",
+    "main.js": "/trainingCenterTradeStudy/static/js/main.c737fda0.js",
     "static/js/787.9e8007a3.chunk.js": "/trainingCenterTradeStudy/static/js/787.9e8007a3.chunk.js",
     "index.html": "/trainingCenterTradeStudy/index.html",
     "main.f855e6bc.css.map": "/trainingCenterTradeStudy/static/css/main.f855e6bc.css.map",
-    "main.4f6194d8.js.map": "/trainingCenterTradeStudy/static/js/main.4f6194d8.js.map",
+    "main.c737fda0.js.map": "/trainingCenterTradeStudy/static/js/main.c737fda0.js.map",
     "787.9e8007a3.chunk.js.map": "/trainingCenterTradeStudy/static/js/787.9e8007a3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.4f6194d8.js"
+    "static/js/main.c737fda0.js"
   ]
 }
