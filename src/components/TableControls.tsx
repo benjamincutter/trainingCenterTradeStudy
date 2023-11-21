@@ -48,7 +48,7 @@ const TableControls = ({
                         Total weight: {roundToTwoDecimals(totalWeight)}
                     </Typography>
                     {sliders.map((slider) => (
-                        <FormGroup>
+                        <FormGroup key={slider.name}>
                             <Typography>
                                 {slider.name} (
                                 {roundToTwoDecimals(slider.value)})

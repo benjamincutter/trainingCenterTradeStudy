@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import City from '../models/city';
+import { City, WEIGHTED_FIELDS } from '../models/cityFactory';
 import { NormalizedCity2 } from '../hooks/useNormalizeField';
 
 interface RawDataTableProps {
@@ -8,23 +8,17 @@ interface RawDataTableProps {
     useNormalized: boolean;
 }
 
-const dataColumnNames = [
-    { data: 'sunnyDays', headerName: 'Sunny Days' },
-    { data: 'comfortIndex', headerName: 'Comfort Index' },
-    { data: 'commuteTime', headerName: 'Commute Time' },
-];
-
 const RawDataTable = ({ data, useNormalized }: RawDataTableProps) => {
-    const dataColumns = dataColumnNames.map((name) => {
+    const dataColumns = WEIGHTED_FIELDS.map((name) => {
         return {
-            field: name.data,
-            headerName: name.headerName,
+            field: name.field,
+            headerName: name.prettyName,
             width: 150,
             // @ts-ignore
             valueGetter: ({ row }) =>
                 useNormalized
-                    ? row[name.data].normalized
-                    : row[name.data].value,
+                    ? row[name.field].normalized
+                    : row[name.field].value,
         };
     });
 

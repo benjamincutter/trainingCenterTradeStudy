@@ -3,35 +3,39 @@ import logo from './logo.svg';
 import './App.css';
 import RawDataTable from './components/RawDataTable';
 import TableControls from './components/TableControls';
-import City from './models/city';
 import { useNormalizedCities } from './hooks/useNormalizeField';
-
-const cities: City[] = [
-    new City(1, 'Charlotte', 7.5, 218, 25.3),
-    new City(2, 'Atlanta', 7.6, 217, 26.3),
-    new City(3, 'San Antonio', 7.6, 220, 24.13),
-    new City(4, 'West Palm Beach', 6.6, 238, 22.69),
-    new City(5, 'Colorado Springs', 7.1, 243, 21.83),
-    new City(6, 'Santa Fe', 7.5, 283, 19.14),
-    new City(7, 'Chicago', 7, 189, 34.63),
-    new City(8, 'Olympia', 7.1, 136, 20.48),
-    new City(9, 'Boston', 6.9, 200, 30.44),
-    new City(10, 'San Diego', 9.2, 266, 23.97),
-];
+import { WEIGHTED_FIELDS, getCities } from './models/cityFactory';
 
 function App() {
-    const defaultWeight = 1 / 3;
+    const cities = getCities();
+    const defaultWeight = 1 / 10;
     const [sunnyDaysWeight, setSunnydaysWeight] = useState(defaultWeight);
     const [comfortIndexWeight, setComfortIndexWeight] = useState(defaultWeight);
     const [commuteTimeWeight, setCommuteTimeWeight] = useState(defaultWeight);
+    const [propertyTaxWeight, setPropertyTaxWeight] = useState(defaultWeight);
+    const [jobGrowhtWeight, setJobGrowthWeight] = useState(defaultWeight);
+    const [violentCrimeWeight, setViolentCrimeWeight] = useState(defaultWeight);
+    const [unemploymentWeight, setUnemploymentWeight] = useState(defaultWeight);
+    const [hospitalitySectorWeight, setHospitalitySectorWeight] =
+        useState(defaultWeight);
+    const [houseAppreciationWeight, setHouseAppreciationWeight] =
+        useState(defaultWeight);
+    const [medianAgeWeight, setMedianAgeWeight] = useState(defaultWeight);
+
     const [showNormalizedScore, setShowNormalizedScore] = useState(false);
 
     const normalizedComfortIndex = useNormalizedCities(cities, {
         comfortIndex: comfortIndexWeight,
         sunnyDays: sunnyDaysWeight,
         commuteTime: commuteTimeWeight,
+        propertyTax: propertyTaxWeight,
+        jobGrowth: jobGrowhtWeight,
+        violentCrime: violentCrimeWeight,
+        unemploymentRate: unemploymentWeight,
+        hospitalitySector: hospitalitySectorWeight,
+        houseAppreciation: houseAppreciationWeight,
+        medianAge: medianAgeWeight,
     });
-    console.dir(normalizedComfortIndex);
     const sliders = [
         {
             name: 'Sunny Days',
@@ -47,6 +51,41 @@ function App() {
             name: 'Commute Time',
             value: commuteTimeWeight,
             setValue: setCommuteTimeWeight,
+        },
+        {
+            name: 'Property Tax',
+            value: propertyTaxWeight,
+            setValue: setPropertyTaxWeight,
+        },
+        {
+            name: 'Job Growth',
+            value: jobGrowhtWeight,
+            setValue: setJobGrowthWeight,
+        },
+        {
+            name: 'Violent Crime',
+            value: violentCrimeWeight,
+            setValue: setViolentCrimeWeight,
+        },
+        {
+            name: 'Unemployment Rate',
+            value: unemploymentWeight,
+            setValue: setUnemploymentWeight,
+        },
+        {
+            name: 'Hospitality Sector',
+            value: hospitalitySectorWeight,
+            setValue: setHospitalitySectorWeight,
+        },
+        {
+            name: 'House Appreciation',
+            value: houseAppreciationWeight,
+            setValue: setHouseAppreciationWeight,
+        },
+        {
+            name: 'Median Age',
+            value: medianAgeWeight,
+            setValue: setMedianAgeWeight,
         },
     ];
     return (

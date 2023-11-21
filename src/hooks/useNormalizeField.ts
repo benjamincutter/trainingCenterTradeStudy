@@ -1,4 +1,4 @@
-import City from '../models/city';
+import { City, CityFields, WEIGHTED_FIELDS } from '../models/cityFactory';
 
 interface NormalizedFieldResult {
     minimum: number;
@@ -11,69 +11,55 @@ interface FieldValue {
     normalized: number;
 }
 
-interface NormalizedCity {
-    city: City;
-    normalizedComfortIndex: number;
-    normalizedSunnyDays: number;
-    normalizedCommuteTime: number;
-}
-
 export interface NormalizedCity2 {
     id: number;
     name: string;
     comfortIndex: FieldValue;
     sunnyDays: FieldValue;
     commuteTime: FieldValue;
+    propertyTax: FieldValue;
     weightedScore: number;
 }
-
-type CityFields = 'comfortIndex' | 'sunnyDays' | 'commuteTime';
 
 export const useNormalizedCities = (
     cities: City[],
     weights: Record<CityFields, number>
 ): NormalizedCity2[] => {
-    const fields: CityFields[] = ['comfortIndex', 'sunnyDays', 'commuteTime'];
     const normalizedResults: Record<string, NormalizedFieldResult> = {};
-    fields.forEach((field) => {
-        normalizedResults[field] = getNormalizedField(cities, field);
+    WEIGHTED_FIELDS.forEach((field) => {
+        normalizedResults[field.field] = getNormalizedField(
+            cities,
+            field.field
+        );
     });
 
     return cities.map((city) => {
-        const normalizedComfortIndex = normalizeField(
-            city.comfortIndex,
-            normalizedResults.comfortIndex
-        );
-        const normalizedSunnyDays = normalizeField(
-            city.sunnyDays,
-            normalizedResults.sunnyDays
-        );
-        const normalizedCommuteTime = normalizeField(
-            city.commuteTime,
-            normalizedResults.commuteTime
-        );
-
-        return {
+        // @ts-ignore
+        const normalizedCity: NormalizedCity2 = {
             id: city.id,
             name: city.name,
-            comfortIndex: {
-                value: city.comfortIndex,
-                normalized: normalizedComfortIndex,
-            },
-            commuteTime: {
-                value: city.commuteTime,
-                normalized: normalizedCommuteTime,
-            },
-            sunnyDays: {
-                value: city.sunnyDays,
-                normalized: normalizedSunnyDays,
-            },
-            weightedScore: roundToTwoDecimals(
-                normalizedComfortIndex * weights.comfortIndex +
-                    normalizedSunnyDays * weights.sunnyDays +
-                    normalizedCommuteTime * weights.commuteTime
-            ),
         };
+
+        let weightedScoreAggregator = 0;
+        WEIGHTED_FIELDS.forEach((field) => {
+            // @ts-ignore
+            const normalizedField = normalizeField(
+                city[field.field],
+                normalizedResults[field.field],
+                field.inverted
+            );
+            // @ts-ignore
+            normalizedCity[field.field] = {
+                value: city[field.field],
+                normalized: normalizedField,
+            };
+            weightedScoreAggregator += normalizedField * weights[field.field];
+        });
+
+        normalizedCity.weightedScore = roundToTwoDecimals(
+            weightedScoreAggregator
+        );
+        return normalizedCity;
     });
 };
 
@@ -88,11 +74,17 @@ const getNormalizedField = (cities: City[], field: CityFields) => {
 
 const normalizeField = (
     field: number,
-    normalizedFieldResult: NormalizedFieldResult
+    normalizedFieldResult: NormalizedFieldResult,
+    inverse: boolean
 ) => {
-    return roundToTwoDecimals(
-        (field - normalizedFieldResult.minimum) / normalizedFieldResult.range
-    );
+    let result =
+        (field - normalizedFieldResult.minimum) / normalizedFieldResult.range;
+
+    if (inverse) {
+        return roundToTwoDecimals(1 - result);
+    }
+
+    return roundToTwoDecimals(result);
 };
 
 export const roundToTwoDecimals = (value: number) => {
